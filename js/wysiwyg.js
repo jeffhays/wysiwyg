@@ -1,5 +1,6 @@
 ;(function($, doc, win) {
 	"use strict";
+	var ctrlKey = false;
 
 	// Our main function to setup our wysiwyg editors
 	function wysiwyg(el, opts) {
@@ -31,16 +32,6 @@
 		if(src) {
 			document.execCommand('insertImage', false, src);
 		}
-	}
-	function createHeading(type) {
-		try {
-			alert(type.toUpperCase());
-			document.execCommand('heading', false, type.toUpperCase());
-		} catch(e) {
-			alert('no heading support');
-			// The browser doesn't support "heading" command, we use an alternative
-			document.execCommand('formatBlock', false, '<' + type + '>');
-		}						
 	}
 	function wrap(tagName) {
 	    var selection;
@@ -85,8 +76,8 @@
 							// Editing
 							$(this).siblings('.wysiwyg_buttons').fadeIn();
 							$(this).children('.icon-edit-sign').removeClass('icon-edit-sign').addClass('icon-edit');
-							$(this).parent().siblings('.wysiwyg_content').prop('contenteditable', 'true').focus().keypress("b", function(e){
-								if(e.ctrlKey) console.log('yes');
+							$(this).parent().siblings('.wysiwyg_content').prop('contenteditable', 'true').focus().keypress(function(e){
+								if (ctrlDown && (e.keyCode == vKey || e.keyCode == cKey)) return false;
 							});
 						} else {
 							// Saving
@@ -131,22 +122,22 @@
 					// Main heading
 					$('<button>').append(
 						$('<i>').addClass('icon-h-sign').text(' 1')
-					).prop({title: 'Main Heading', alt: 'Main Heading'}).click(function() { createHeading('h1'); }),
+					).prop({title: 'Main Heading', alt: 'Main Heading'}).click(function() { wrap('h1'); }),
 					// Subtitle heading
 					$('<button>').append(
 						$('<i>').addClass('icon-h-sign').text(' 2')
-					).prop({title: 'Subtitle Heading', alt: 'Subtitle Heading'}).click(function() { createHeading('h2'); }),
+					).prop({title: 'Subtitle Heading', alt: 'Subtitle Heading'}).click(function() { wrap('h2'); }),
 					// Unordered list
 					$('<button>').append(
 						$('<i>').addClass('icon-list-ul')
 					).prop({title: 'Unordered List', alt: 'Unordered List'}).click(function() {
-						document.execCommand('insertHTML', false, '<ul><li></li></ul>');
+						document.execCommand('insertUnorderedList', false, null);
 					}),
 					// Ordered list
 					$('<button>').append(
 						$('<i>').addClass('icon-list-ol')
-					).prop({title: 'Ordered List', alt: 'Ordered List'}).click(function() { 
-						document.execCommand('insertHTML', false, '<ol><li></li></ol>'); 
+					).prop({title: 'Ordered List', alt: 'Ordered List'}).click(function() {
+						document.execCommand('insertOrderedList', false, null);
 					}),
 					// // Increase font size
 					// $('<button>').append(
@@ -200,6 +191,18 @@
 					$('<button>').append(
 						$('<i>').addClass('icon-link')
 					).prop({title: 'Create Link', alt: 'Create Link'}).click(function() { createLink(); }),
+					// Subscript
+					$('<button>').append(
+						$('<i>').addClass('icon-subscript')
+					).prop({title: 'Subscript', alt: 'Subscript'}).click(function() {
+						document.execCommand('subScript', false, null);
+					}),
+					// Superscript
+					$('<button>').append(
+						$('<i>').addClass('icon-superscript')
+					).prop({title: 'Superscript', alt: 'Superscript'}).click(function() {
+						document.execCommand('superScript', false, null);
+					}),
 					// Insert picture
 					$('<button>').append(
 						$('<i>').addClass('icon-picture')
