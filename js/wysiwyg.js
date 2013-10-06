@@ -1,6 +1,7 @@
 ;(function($, doc, win) {
 	"use strict";
 
+	// Our main function to setup our wysiwyg editors
 	function wysiwyg(el, opts) {
 	    this.$el = $(el);
 	    this.init(opts);
@@ -8,13 +9,13 @@
 	    // Setup container
 		var html = this.$el.html();
 		this.$el.empty().append(
-			this.opts.html.wrapper.append(html)
-		).append(
 			this.opts.html.container.append(
 				this.opts.html.buttonsContainer.append(
 					this.opts.html.buttons
 				)
 			)
+		).append(
+			this.opts.html.wrapper.append(html)
 		);
 	}
 
@@ -33,29 +34,13 @@
 	}
 	function createHeading(type) {
 		try {
-			document.execCommand('heading', false, type);
+			alert(type.toUpperCase());
+			document.execCommand('heading', false, type.toUpperCase());
 		} catch(e) {
+			alert('no heading support');
 			// The browser doesn't support "heading" command, we use an alternative
 			document.execCommand('formatBlock', false, '<' + type + '>');
 		}						
-	}
-	function createUL() {
-		document.execCommand('insertHTML', false, '<ul><li></li></ul>');
-	}
-	function createOL() {
-		document.execCommand('insertHTML', false, '<ol><li></li></ol>');
-	}
-	function bold() {
-		document.execCommand('bold', false, null);
-	}
-	function italic() {
-		document.execCommand('italic', false, null);
-	}
-	function underline() {
-		document.execCommand('underline', false, null);
-	}
-	function strike(){
-		document.execCommand('strikeThrough', false, null);
 	}
 	function wrap(tagName) {
 	    var selection;
@@ -111,21 +96,68 @@
 				),
 				buttonsContainer: $('<div>').addClass('wysiwyg_buttons').hide(),
 				buttons: [
-					$('<button>').data('tag', 'bold').append($('<b>').text('Bold')).click(function() { bold(); }),
-					$('<button>').data('tag', 'italic').append($('<em>').text('Italic')).click(function() { italic(); }),
-					$('<button>').data('tag', 'underline').append($('<ins>').text('Underline')).click(function() { underline(); }),
-					$('<button>').data('tag', 'strikeThrough').append($('<del>').text('Strike')).click(function() { strike(); }),
-					$('<button>').data('tag', 'insertUnorderedList').html('&bull; Unordered List').click(function() { createUL(); }),
-					$('<button>').data('tag', 'insertOrderedList').html('1. Ordered List').click(function() { createOL(); }),
-					$('<button>').data('tag', 'createLink').append($('<ins>').css('color', 'blue').text('Link')).click(function() { createLink(); }),
-					$('<button>').data('tag', 'insertImage').text('Image').click(function() { insertImage(); }),
-					$('<button>').data('tag', 'heading').data('value', 'h1').text('Main Title').click(function() { createHeading('h1'); }),
-					$('<button>').data('tag', 'heading').data('value', 'h2').text('Subtitle').click(function() { createHeading('h2'); }),
-					$('<button>').data('tag', 'removeFormat').text('Remove format')
+					// Bold
+					$('<button>').append(
+						$('<i>').addClass('icon-bold').data('tag', 'bold')
+					).prop({title: 'Bold', alt: 'Bold'}).click(function() { 
+						document.execCommand('bold', false, null); 
+					}),
+					// Italic
+					$('<button>').append(
+						$('<i>').addClass('icon-italic').data('tag', 'italic')
+					).prop({title: 'Italic', alt: 'Italic'}).click(function() { 
+						document.execCommand('italic', false, null); 
+					}),
+					// Underline
+					$('<button>').append(
+						$('<i>').addClass('icon-underline').data('tag', 'underline')
+					).prop({title: 'Underline', alt: 'Underline'}).click(function() {
+						document.execCommand('underline', false, null);
+					}),
+					// Strikethrough
+					$('<button>').append(
+						$('<i>').addClass('icon-strikethrough').data('tag', 'strikeThrough')
+					).prop({title: 'Strikethrough', alt: 'Strikethrough'}).click(function() { 
+						document.execCommand('strikeThrough', false, null);
+					}),
+					// Unordered list
+					$('<button>').append(
+						$('<i>').addClass('icon-list-ul').data('tag', 'insertUnorderedList')
+					).prop({title: 'Unordered List', alt: 'Unordered List'}).click(function() {
+						document.execCommand('insertHTML', false, '<ul><li></li></ul>');
+					}),
+					// Ordered list
+					$('<button>').append(
+						$('<i>').addClass('icon-list-ol').data('tag', 'insertOrderedList')
+					).prop({title: 'Ordered List', alt: 'Ordered List'}).click(function() { 
+						document.execCommand('insertHTML', false, '<ol><li></li></ol>'); 
+					}),
+					// Create link
+					$('<button>').append(
+						$('<i>').addClass('icon-link').data('tag', 'createLink')
+					).prop({title: 'Create Link', alt: 'Create Link'}).click(function() { createLink(); }),
+					// Insert picture
+					$('<button>').append(
+						$('<i>').addClass('icon-picture').data('tag', 'insertImage')
+					).prop({title: 'Insert Picture', alt: 'Insert Picture'}).click(function() { insertImage(); }),
+					// Main heading
+					$('<button>').append(
+						$('<i>').addClass('icon-h-sign').data('tag', 'heading').data('value', 'h1').text(' 1')
+					).prop({title: 'Main Heading', alt: 'Main Heading'}).click(function() { createHeading('h1'); }),
+					// Subtitle heading
+					$('<button>').append(
+						$('<i>').addClass('icon-h-sign').data('tag', 'heading').data('value', 'h2').text(' 2')
+					).prop({title: 'Subtitle Heading', alt: 'Subtitle Heading'}).click(function() { createHeading('h2'); }),
+					// Remove formatting
+					$('<button>').append(
+						$('<i>').addClass('icon-eraser').data('tag', 'removeFormat')
+					).prop({title: 'Remove Formatting', alt: 'Remove Formatting'}).click(function() {
+						document.execCommand('removeFormat', false, null);
+					})
 				]
 			},
 			save: function() {
-				$.post(this.href, {
+				$.ajax(this.href, {
 					
 				}).done(function() {
 

@@ -3,8 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title></title>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="wysiwyg.js"></script>
+	<link rel="stylesheet" href="css/font-awesome.min.css">
 </head>
 <body>
 	<div class="editor">
@@ -30,6 +29,8 @@
 	    <p>This <em>WYSIWYG</em> (<b>W</b>hat <b>Y</b>ou <b>S</b>ee <b>I</b>s <b>W</b>hat <b>Y</b>ou <b>G</b>et) is made
 	        with few lines of <b>JavaScript</b>!</p>
 	</div>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="js/wysiwyg.js"></script>
 	<script>
 	jQuery(document).ready(function($){
 		$('.editor').wysiwyg();
