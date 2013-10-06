@@ -78,81 +78,150 @@
 			html: {
 				wrapper: $('<div>').addClass('wysiwyg_content'),
 				container: $('<div>').addClass('buttons_container').append(
-					$('<button>').addClass('wysiwyg_editButton').text('Edit').click(function() {
-						if($(this).text() == 'Edit') {
+					$('<button>').addClass('wysiwyg_edit').append(
+						$('<i>').addClass('icon-edit-sign')
+					).click(function() {
+						if($(this).hasClass('editing')) {
+							// Editing
 							$(this).siblings('.wysiwyg_buttons').fadeIn();
-							$(this).text('Save');
-							console.log($(this).siblings());
-							$(this).parent().siblings('.wysiwyg_content').prop('contenteditable', 'true').focus();
+							$(this).children('.icon-edit-sign').removeClass('icon-edit-sign').addClass('icon-edit');
+							$(this).parent().siblings('.wysiwyg_content').prop('contenteditable', 'true').focus().keypress("b", function(e){
+								if(e.ctrlKey) console.log('yes');
+							});
 						} else {
+							// Saving
 							$(this).siblings('.wysiwyg_buttons').fadeOut();
-							$(this).text('Edit');
-							$(this).parent().siblings('.wysiwyg_content').removeProp('contenteditable');
+							$(this).children('.icon-edit-sign').removeClass('icon-edit').addClass('icon-edit-sign');
+							$(this).parent().siblings('.wysiwyg_content').removeAttr('contenteditable');
 							// Call AJAX function here
 						}
+						$(this).toggleClass('editing');
 					})
 				).append(
-					$('<button>').addClass('wysiwyg_viewHTML').text('View HTML')
+					$('<button>').addClass('wysiwyg_viewHTML').append(
+						$('<i>').addClass('icon-html5')
+					)
 				),
 				buttonsContainer: $('<div>').addClass('wysiwyg_buttons').hide(),
 				buttons: [
 					// Bold
 					$('<button>').append(
-						$('<i>').addClass('icon-bold').data('tag', 'bold')
+						$('<i>').addClass('icon-bold')
 					).prop({title: 'Bold', alt: 'Bold'}).click(function() { 
 						document.execCommand('bold', false, null); 
 					}),
 					// Italic
 					$('<button>').append(
-						$('<i>').addClass('icon-italic').data('tag', 'italic')
+						$('<i>').addClass('icon-italic')
 					).prop({title: 'Italic', alt: 'Italic'}).click(function() { 
 						document.execCommand('italic', false, null); 
 					}),
 					// Underline
 					$('<button>').append(
-						$('<i>').addClass('icon-underline').data('tag', 'underline')
+						$('<i>').addClass('icon-underline')
 					).prop({title: 'Underline', alt: 'Underline'}).click(function() {
 						document.execCommand('underline', false, null);
 					}),
 					// Strikethrough
 					$('<button>').append(
-						$('<i>').addClass('icon-strikethrough').data('tag', 'strikeThrough')
+						$('<i>').addClass('icon-strikethrough')
 					).prop({title: 'Strikethrough', alt: 'Strikethrough'}).click(function() { 
 						document.execCommand('strikeThrough', false, null);
 					}),
+					// Main heading
+					$('<button>').append(
+						$('<i>').addClass('icon-h-sign').text(' 1')
+					).prop({title: 'Main Heading', alt: 'Main Heading'}).click(function() { createHeading('h1'); }),
+					// Subtitle heading
+					$('<button>').append(
+						$('<i>').addClass('icon-h-sign').text(' 2')
+					).prop({title: 'Subtitle Heading', alt: 'Subtitle Heading'}).click(function() { createHeading('h2'); }),
 					// Unordered list
 					$('<button>').append(
-						$('<i>').addClass('icon-list-ul').data('tag', 'insertUnorderedList')
+						$('<i>').addClass('icon-list-ul')
 					).prop({title: 'Unordered List', alt: 'Unordered List'}).click(function() {
 						document.execCommand('insertHTML', false, '<ul><li></li></ul>');
 					}),
 					// Ordered list
 					$('<button>').append(
-						$('<i>').addClass('icon-list-ol').data('tag', 'insertOrderedList')
+						$('<i>').addClass('icon-list-ol')
 					).prop({title: 'Ordered List', alt: 'Ordered List'}).click(function() { 
 						document.execCommand('insertHTML', false, '<ol><li></li></ol>'); 
 					}),
+					// // Increase font size
+					// $('<button>').append(
+					// 	$('<i>').addClass('icon-long-arrow-up')
+					// ).prop({title: 'Increase Font Size', alt: 'Increase Font Size'}).click(function() {
+					// 	document.execCommand('increaseFontSize', true, null);
+					// }),
+					// // Decrease font size
+					// $('<button>').append(
+					// 	$('<i>').addClass('icon-long-arrow-down')
+					// ).prop({title: 'Decrease Font Size', alt: 'Decrease Font Size'}).click(function() {
+					// 	document.execCommand('decreaseFontSize', false, null);
+					// }),
+					// Insert horizontal rule
+					$('<button>').append(
+						$('<i>').addClass('icon-minus')
+					).prop({title: 'Insert Horizontal Rule', alt: 'Insert Horizontal Rule'}).click(function() { 
+						document.execCommand('insertHorizontalRule', false, null); 
+					}),
+					// Indent right
+					$('<button>').append(
+						$('<i>').addClass('icon-indent-right')
+					).prop({title: 'Indent Right', alt: 'Indent Right'}).click(function() { 
+						document.execCommand('indent', false, null); 
+					}),
+					// Indent left
+					$('<button>').append(
+						$('<i>').addClass('icon-indent-left')
+					).prop({title: 'Indent Left', alt: 'Indent Left'}).click(function() { 
+						document.execCommand('outdent', false, null); 
+					}),
+					// Justify left
+					$('<button>').append(
+						$('<i>').addClass('icon-align-left')
+					).prop({title: 'Justify Left', alt: 'Justify Left'}).click(function() { 
+						document.execCommand('justifyLeft', false, null); 
+					}),
+					// Justify center
+					$('<button>').append(
+						$('<i>').addClass('icon-align-center')
+					).prop({title: 'Justify Center', alt: 'Justify Center'}).click(function() { 
+						document.execCommand('justifyCenter', false, null); 
+					}),
+					// Justify right
+					$('<button>').append(
+						$('<i>').addClass('icon-align-right')
+					).prop({title: 'Justify Right', alt: 'Justify Right'}).click(function() { 
+						document.execCommand('justifyRight', false, null); 
+					}),
 					// Create link
 					$('<button>').append(
-						$('<i>').addClass('icon-link').data('tag', 'createLink')
+						$('<i>').addClass('icon-link')
 					).prop({title: 'Create Link', alt: 'Create Link'}).click(function() { createLink(); }),
 					// Insert picture
 					$('<button>').append(
-						$('<i>').addClass('icon-picture').data('tag', 'insertImage')
+						$('<i>').addClass('icon-picture')
 					).prop({title: 'Insert Picture', alt: 'Insert Picture'}).click(function() { insertImage(); }),
-					// Main heading
-					$('<button>').append(
-						$('<i>').addClass('icon-h-sign').data('tag', 'heading').data('value', 'h1').text(' 1')
-					).prop({title: 'Main Heading', alt: 'Main Heading'}).click(function() { createHeading('h1'); }),
-					// Subtitle heading
-					$('<button>').append(
-						$('<i>').addClass('icon-h-sign').data('tag', 'heading').data('value', 'h2').text(' 2')
-					).prop({title: 'Subtitle Heading', alt: 'Subtitle Heading'}).click(function() { createHeading('h2'); }),
 					// Remove formatting
 					$('<button>').append(
-						$('<i>').addClass('icon-eraser').data('tag', 'removeFormat')
+						$('<i>').addClass('icon-eraser')
 					).prop({title: 'Remove Formatting', alt: 'Remove Formatting'}).click(function() {
 						document.execCommand('removeFormat', false, null);
+					}),
+					// Insert br tag on enter key
+					$('<button>').append(
+						$('<i>').addClass('icon-level-down')
+					).prop({title: 'Toggle <br> on Enter Key', alt: 'Toggle <br> on Enter Key'}).click(function() {
+						if($(this).children('i').hasClass('icon-level-down')) {
+							// Toggle on
+							$(this).children('i').removeClass('icon-level-down').addClass('icon-level-up');
+						} else {
+							// Toggle off
+							$(this).children('i').removeClass('icon-level-up').addClass('icon-level-down');
+						}
+						document.execCommand('insertBrOnReturn', false, true);
 					})
 				]
 			},
