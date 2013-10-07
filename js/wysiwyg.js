@@ -34,7 +34,7 @@
 
 // Button functions and events
 
-	// Alter default buttons based on user input
+	// Default button events
 	function createButtons(opts) {
 		// Grab buttons from options (and initialize btns to default buttons)
 		var btns = opts.html.buttons;
