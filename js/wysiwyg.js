@@ -26,7 +26,9 @@
 			if(e.keyCode == 17 || e.keyCode == 91) ctrlDown = false;
 		});
 	}
-
+	function countEditors(){
+		var divs= $('.editor').size();
+	}
 	// Default button events
 	function createButtons(opts) {
 		var btns = opts.html.buttons;
