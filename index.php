@@ -33,7 +33,13 @@
 	<script src="js/wysiwyg.js"></script>
 	<script>
 	jQuery(document).ready(function($){
-		$('.editor').wysiwyg();
+		$('.editor').wysiwyg({
+			events: {
+				beforeCreated: function(){
+					console.log('modified before');
+				}
+			}
+		});
 	});
 	</script>
 </body>

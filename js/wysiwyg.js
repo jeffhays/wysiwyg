@@ -1,56 +1,61 @@
 ;(function($, doc, win) {
 	"use strict";
-	var ctrlDown = false,
-		elIndex = 0;
+	var	$callbacks = $.Callbacks(),
+		$buttons,
+		ctrl = false;
 
 	// Main setup function for wysiwyg editors (makes editors)
-	function wysiwyg(el, opts) {
-		this.$el = $(el);
-		this.$btns = this.init(opts);
+	function wysiwyg(element, options) {
+		// Setup variables
+		this.$element = $(element);
+		this.$options = this.init(options);
+
+		// Fire the before callback
+		this.$options.beforeCreated();
 
 		// Setup container
-		var html = this.$el.html();
+		var html = this.$element.html();
 		// Empty current container
-		this.$el.empty().append(
+		this.$element.empty().append(
 			// Add container
-			this.opts.html.container.append(
+			this.$options.html.container.append(
 				// Add buttons container
-				this.opts.html.buttonsContainer.append(
+				this.$options.html.buttonsContainer.append(
 					// Add buttons
-					this.$btns
+					this.$buttons
 				)
 			)
 		).append(
 			// Add wysiwyg content wrapper with original HTML inside
-			this.opts.html.wrapper.attr('id', elIndex).append(html)
+			this.$options.html.wrapper.append(html)
 		);
+
+		// Fire the after callback
+		this.$options.afterCreated();
 
 		// Bind key events to check for CTRL/CMD key
 		$(document).keydown(function(e) {
-			if(e.keyCode == 17 || e.keyCode == 91) ctrlDown = true;
+			if(e.keyCode == 17 || e.keyCode == 91) this.ctrl = true;
 		}).keyup(function(e) {
-			if(e.keyCode == 17 || e.keyCode == 91) ctrlDown = false;
+			if(e.keyCode == 17 || e.keyCode == 91) this.ctrl = false;
 		});
-
-		// Increment element index
-		elIndex++;
 
 		return this;
 	}
 
 // Button functions and events
 
-	// Default button events
-	function createButtons(opts) {
+	// Default buttons (filter buttons from defaults based on options passed)
+	function filterButtons(options) {
 		// Grab buttons from options (and initialize btns to default buttons)
-		var btns = opts.html.buttons;
+		var btns = options.html.buttons;
 		// If we have buttons
 		if(btns.length) {
 			// Reset buttons and push based on options passed
 			var btns = [];
-			$.each(opts.html.buttons, function(index, value) {
+			$.each(options.html.buttons, function(index, value) {
 				// If this button is in the buttons array and not in the excludeButtons array, add it
-				if($.inArray(value.name, opts.buttons) >= 0 && $.inArray(value.name, opts.excludeButtons) < 0) btns.push(value.html);
+				if($.inArray(value.name, options.buttons) >= 0 && $.inArray(value.name, options.excludeButtons) < 0) btns.push(value.html);
 			});
 		}
 		// Return our new buttons
@@ -76,12 +81,12 @@
 	// Wraps current selection in a tag of your choosing
 	function wrap(tagName) {
 		// Initialize
-		var selection;
-		var elements = [];
-		var ranges = [];
-		var rangeCount = 0;
-		var frag;
-		var lastChild;
+		var	selection,
+			frag,
+			lastChild,
+			elements = [],
+			ranges = [],
+			rangeCount = [];
 		// If we have a selection inside a content editable area
 		if(window.getSelection) {
 			// Set selection
@@ -100,7 +105,6 @@
 					ranges[i].insertNode(elements[i]);
 					ranges[i].selectNode(elements[i]);
 				}
-
 				// Restore ranges
 				selection.removeAllRanges();
 				i = ranges.length;
@@ -114,39 +118,56 @@
 // Methods
 
 	// Initialize
-	wysiwyg.prototype.init = function(opts) {
+	wysiwyg.prototype.init = function(options) {
+		// Default events
+		var events = {
+			// Save content
+			edit: function() {
+				console.log('edit event fired');
+			},
+			save: function() {
+				console.log('save event fired');
+				$.ajax(this.href, {
+					method: 'post',
+					data: {
+						action: 'update',
+						content: ''
+					}
+				}).done(function() {
+
+				});
+			},
+			// Before wysiwyg(s) are created
+			beforeCreated: function() {
+				console.log('before event fired');
+			},
+			// After wysiwyg(s) are created
+			afterCreated: function() {
+				console.log('after event fired');
+			}
+		},
 		// Default styles
-		var styles = {
+		styles = {
+			// Button styles
 			buttons: {
 				cursor: 'pointer',
 				margin: '0 .2em 0 0',
 				minWidth: '20px'
 			},
+			// Icon styles
 			icons: {
 				fontSize: '1em'
 			}
 		};
-		// Extend styles with any css passed
-		if(opts && typeof(opts.css) != 'undefined') $.extend(styles, opts.css);
+		// Extend events and css with options passed
+		if(options && typeof(options.events) != 'undefined') $.extend(events, options.events);
+		if(options && typeof(options.css) != 'undefined') $.extend(styles, options.styles);
 
 		// Default settings
 		var defaults = {
-			// Events
-			events: {
-				save: function() {
-					// Save content
-					$.ajax(this.href, {
-						method: 'post',
-						data: {
-							action: 'update',
-							content: ''
-						}
-					}).done(function() {
-						
-					});
-				}
-			},
+			// Buttons to show
 			buttons: ['bold', 'italic', 'underline', 'strikethough', 'h1', 'h2', 'ul', 'ol', 'increaseFont', 'decreaseFont', 'hr', 'indentRight', 'indentLeft', 'justifyLeft', 'justifyCenter', 'justifyRight', 'link', 'subscript', 'superscript', 'image', 'removeFormat', 'br'],
+			// Buttons to hide
 			excludeButtons: [],
 			// HTML
 			html: {
@@ -160,17 +181,20 @@
 					).click(function() {
 						if(!$(this).hasClass('editing')) {
 							// Editing
-							$(this).siblings('.wysiwyg_buttons').fadeIn();
+							$(this).siblings('.wysiwyg_buttons').slideToggle();
 							$(this).children('.icon-edit-sign').removeClass('icon-edit-sign').addClass('icon-save');
 							$(this).parent().siblings('.wysiwyg_content').prop('contenteditable', 'true').focus().keypress(function(e) {
-								if(ctrlDown && (e.keyCode == 98)) console.log('bold');
+								if(this.ctrl && (e.keyCode == 98)) console.log('bold');
 							});
+							// Fire edit callback
+							events.edit();
 						} else {
 							// Saving
-							$(this).siblings('.wysiwyg_buttons').fadeOut();
+							$(this).siblings('.wysiwyg_buttons').slideToggle();
 							$(this).children('.icon-save').removeClass('icon-save').addClass('icon-edit-sign');
 							$(this).parent().siblings('.wysiwyg_content').removeAttr('contenteditable');
-							// Call AJAX function here
+							// Fire save callback
+							events.save();
 						}
 						$(this).toggleClass('editing');
 					})
@@ -361,20 +385,23 @@
 				}]
 			}
 		}
-		// Extend defaults with opts passed
-		$.extend(defaults, opts);
-		this.opts = defaults;
+		// Extend defaults with options passed
+		$.extend(defaults, options, events);
+		this.$options = defaults;
 
-		// Create and return buttons
-		return createButtons(this.opts);
+		// Filter and return buttons
+		this.$buttons = filterButtons(this.$options);
+
+		// Return our defaults
+		return defaults;
 	};
 
 	// Main class wrapper for .wysiwyg()
-	$.fn.wysiwyg = function(opts) {
+	$.fn.wysiwyg = function(options) {
 		// Loop through items selected
 		return this.each(function() {
 			// Create new wysiwyg object with this element
-			new wysiwyg(this, opts);
+			new wysiwyg(this, options);
 		});
 	};
 
