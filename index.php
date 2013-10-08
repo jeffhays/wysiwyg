@@ -34,7 +34,6 @@
 	<script>
 	jQuery(document).ready(function($){
 		$('.editor').wysiwyg({
-			buttons
 			events: {
 				beforeCreated: function(){
 					console.log('modified before');
