@@ -1,13 +1,14 @@
 ;(function($, doc, win) {
 	"use strict";
-	var ctrlDown = false;
+	var ctrlDown = false,
+		elIndex = 0;
 
 	// Main setup function for wysiwyg editors (makes editors)
 	function wysiwyg(el, opts) {
-	    this.$el = $(el);
-	    this.$btns = this.init(opts);
+		this.$el = $(el);
+		this.$btns = this.init(opts);
 
-	    // Setup container
+		// Setup container
 		var html = this.$el.html();
 		// Empty current container
 		this.$el.empty().append(
@@ -21,7 +22,7 @@
 			)
 		).append(
 			// Add wysiwyg content wrapper with original HTML inside
-			this.opts.html.wrapper.append(html)
+			this.opts.html.wrapper.attr('id', elIndex).append(html)
 		);
 
 		// Bind key events to check for CTRL/CMD key
@@ -30,6 +31,9 @@
 		}).keyup(function(e) {
 			if(e.keyCode == 17 || e.keyCode == 91) ctrlDown = false;
 		});
+
+		// Increment element index
+		elIndex++;
 	}
 
 // Button functions and events
@@ -71,39 +75,39 @@
 	// Wraps current selection in a tag of your choosing
 	function wrap(tagName) {
 		// Initialize
-	    var selection;
-	    var elements = [];
-	    var ranges = [];
-	    var rangeCount = 0;
-	    var frag;
-	    var lastChild;
-	    // If we have a selection inside a content editable area
-	    if(window.getSelection) {
-	    	// Set selection
-	        selection = window.getSelection();
-	        // If it's a range (1 or more characters)
-	        if(selection.rangeCount) {
-	        	// Set iterator at top of selection
-	            var i = selection.rangeCount;
-	            // Loop down one character at a time until at beginning of selection
-	            while(i--) {
-	            	// Set variables
-	                ranges[i] = selection.getRangeAt(i).cloneRange();
-	                // Create wrap
-	                elements[i] = document.createElement(tagName);
-	                elements[i].appendChild(ranges[i].extractContents());
-	                ranges[i].insertNode(elements[i]);
-	                ranges[i].selectNode(elements[i]);
-	            }
-	            
-	            // Restore ranges
-	            selection.removeAllRanges();
-	            i = ranges.length;
-	            while(i--) {
-	                selection.addRange(ranges[i]);
-	            }
-	        }
-	    }
+		var selection;
+		var elements = [];
+		var ranges = [];
+		var rangeCount = 0;
+		var frag;
+		var lastChild;
+		// If we have a selection inside a content editable area
+		if(window.getSelection) {
+			// Set selection
+			selection = window.getSelection();
+			// If it's a range (1 or more characters)
+			if(selection.rangeCount) {
+				// Set iterator at top of selection
+				var i = selection.rangeCount;
+				// Loop down one character at a time until at beginning of selection
+				while(i--) {
+				// Set variables
+				ranges[i] = selection.getRangeAt(i).cloneRange();
+					// Create wrap
+					elements[i] = document.createElement(tagName);
+					elements[i].appendChild(ranges[i].extractContents());
+					ranges[i].insertNode(elements[i]);
+					ranges[i].selectNode(elements[i]);
+				}
+
+				// Restore ranges
+				selection.removeAllRanges();
+				i = ranges.length;
+				while(i--) {
+					selection.addRange(ranges[i]);
+				}
+			}
+		}
 	}
 
 // Methods
