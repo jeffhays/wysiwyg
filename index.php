@@ -33,14 +33,7 @@
 	<script src="js/wysiwyg.js"></script>
 	<script>
 	jQuery(document).ready(function($){
-		$('.editor').wysiwyg({
-			buttons: ['bold', 'italic'],
-			css: {
-				buttons: {
-					color: 'red'
-				}
-			}
-		});
+		$('.editor').wysiwyg();
 	});
 	</script>
 </body>

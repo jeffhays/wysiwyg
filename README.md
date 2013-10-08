@@ -12,4 +12,4 @@ to-do
 - Add options for extending button styles
 - Add font dropdown/autocomplete/list for selecting font families
 - Debug issues with increaseFont/decreaseFont
-- 
+- Add in custom event hooks to buttons and/or wysiwyg in general

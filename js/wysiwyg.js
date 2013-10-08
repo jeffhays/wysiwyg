@@ -34,6 +34,8 @@
 
 		// Increment element index
 		elIndex++;
+
+		return this;
 	}
 
 // Button functions and events
@@ -47,7 +49,6 @@
 			// Reset buttons and push based on options passed
 			var btns = [];
 			$.each(opts.html.buttons, function(index, value) {
-				console.log(opts.buttons);
 				// If this button is in the buttons array and not in the excludeButtons array, add it
 				if($.inArray(value.name, opts.buttons) >= 0 && $.inArray(value.name, opts.excludeButtons) < 0) btns.push(value.html);
 			});
@@ -112,18 +113,6 @@
 
 // Methods
 
-	// Save content
-	wysiwyg.prototype.save = function() {
-		$.ajax(this.href, {
-			method: 'post',
-			data: {
-				index: 'test'
-			}
-		}).done(function() {
-
-		});
-	}
-
 	// Initialize
 	wysiwyg.prototype.init = function(opts) {
 		// Default styles
@@ -140,13 +129,22 @@
 		// Extend styles with any css passed
 		if(opts && typeof(opts.css) != 'undefined') $.extend(styles, opts.css);
 
-		// 
-
 		// Default settings
 		var defaults = {
 			// Events
 			events: {
-
+				save: function() {
+					// Save content
+					$.ajax(this.href, {
+						method: 'post',
+						data: {
+							action: 'update',
+							content: ''
+						}
+					}).done(function() {
+						
+					});
+				}
 			},
 			buttons: ['bold', 'italic', 'underline', 'strikethough', 'h1', 'h2', 'ul', 'ol', 'increaseFont', 'decreaseFont', 'hr', 'indentRight', 'indentLeft', 'justifyLeft', 'justifyCenter', 'justifyRight', 'link', 'subscript', 'superscript', 'image', 'removeFormat', 'br'],
 			excludeButtons: [],
