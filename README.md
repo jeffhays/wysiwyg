@@ -26,14 +26,12 @@ Changing Default Buttons
 
 You can pass an array of ``buttons`` to include:
 
-.. code:: javascript
 	$('.editor').wysiwyg({
 		buttons: ['bold', 'italic', 'strikeThrough']
 	});
 
 Here's a full list of the default buttons that currently come with the editor (this may be out of date so double check wysiwyg.js):
 
-.. code:: javascript
 	buttons: ['bold', 'italic', 'underline', 'strikethough', 'h1', 'h2', 'ul', 'ol', 'increaseFont', 'decreaseFont', 'hr', 'indentRight', 'indentLeft', 'justifyLeft', 'justifyCenter', 'justifyRight', 'link', 'subscript', 'superscript', 'image', 'removeFormat', 'br'],
 
 =================
@@ -42,7 +40,6 @@ Excluding Buttons
 
 You can pass an array of ``excludedButtons`` to exclude buttons:
 
-.. code:: javascript
 	$('.editor').wysiwyg({
 		excludeButtons: ['br', 'fontDecrease']
 	});
@@ -53,7 +50,6 @@ Custom CSS
 
 You can pass custom CSS to the ``buttons`` and/or ``icons`` with thte following:
 
-.. code:: javascript
 	$('.editor').wysiwyg({
 		css: {
 			buttons: {
@@ -70,8 +66,6 @@ Custom Events
 =============
 
 You can modify the ``before``, ``edit``, ``save``, and ``after`` functions with the following syntax:
-
-.. code:: javascript
 
 	$('.editor').wysiwyg({
 		events: {
