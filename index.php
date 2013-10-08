@@ -34,9 +34,9 @@
 	<script>
 	jQuery(document).ready(function($){
 		$('.editor').wysiwyg({
-			events: {
-				beforeCreated: function(){
-					console.log('modified before');
+			css: {
+				icons: {
+					color: 'red'
 				}
 			}
 		});

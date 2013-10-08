@@ -159,7 +159,7 @@
 		};
 		// Extend events and css with options passed
 		if(options && typeof(options.events) != 'undefined') $.extend(events, options.events);
-		if(options && typeof(options.css) != 'undefined') $.extend(styles, options.styles);
+		if(options && typeof(options.css) != 'undefined') $.extend(styles, options.css);
 
 		// Default settings
 		var defaults = {
@@ -185,7 +185,8 @@
 								if(this.ctrl && (e.keyCode == 98)) console.log('bold');
 							});
 							// Fire edit callback
-							events.edit();
+							$(this).on('edit', events.edit());
+							$(this).trigger('edit');
 						} else {
 							// Saving
 							$(this).siblings('.wysiwyg_buttons').slideToggle();
