@@ -32,7 +32,28 @@ You can pass an array of ``buttons`` to include:
 
 Here's a full list of the default buttons that currently come with the editor (this may be out of date so double check wysiwyg.js):
 
-	buttons: ['bold', 'italic', 'underline', 'strikethough', 'h1', 'h2', 'ul', 'ol', 'increaseFont', 'decreaseFont', 'hr', 'indentRight', 'indentLeft', 'justifyLeft', 'justifyCenter', 'justifyRight', 'link', 'subscript', 'superscript', 'image', 'removeFormat', 'br'],
+- bold
+- italic
+- underline
+- strikethough
+- h1
+- h2
+- ul
+- ol
+- increaseFont
+- decreaseFont
+- hr
+- indentRight
+- indentLeft
+- justifyLeft
+- justifyCenter
+- justifyRight
+- link
+- subscript
+- superscript
+- image
+- removeFormat
+- br
 
 =================
 Excluding Buttons
