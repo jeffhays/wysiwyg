@@ -121,10 +121,11 @@
 	wysiwyg.prototype.init = function(options) {
 		// Default events
 		var events = {
-			// Save content
+			// Edit content
 			edit: function() {
 				console.log('edit event fired');
 			},
+			// Save content
 			save: function() {
 				console.log('save event fired');
 				$.ajax(this.href, {
@@ -185,8 +186,7 @@
 								if(this.ctrl && (e.keyCode == 98)) console.log('bold');
 							});
 							// Fire edit callback
-							$(this).on('edit', events.edit());
-							$(this).trigger('edit');
+							events.edit();
 						} else {
 							// Saving
 							$(this).siblings('.wysiwyg_buttons').slideToggle();
@@ -196,12 +196,12 @@
 							events.save();
 						}
 						$(this).toggleClass('editing');
-					})
+					}).css(styles.buttons)
 				).append(
 					// View HTML button
 					$('<button>').addClass('wysiwyg_viewHTML').append(
 						$('<i>').addClass('icon-html5').css(styles.icons)
-					)
+					).css(styles.buttons)
 				),
 				// Buttons wrap (inside container above)
 				buttonsContainer: $('<div>').addClass('wysiwyg_buttons').hide(),

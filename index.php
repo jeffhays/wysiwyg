@@ -33,8 +33,11 @@
 	<script src="js/wysiwyg.js"></script>
 	<script>
 	jQuery(document).ready(function($){
-		$('.editor').wysiwyg({
+		var test = $('.editor').wysiwyg({
 			css: {
+				buttons: {
+					padding: '.6em'
+				},
 				icons: {
 					color: 'red'
 				}
