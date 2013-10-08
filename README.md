@@ -7,8 +7,7 @@ This is a custom jQuery WYSIWYG editor plugin made with content editable HTML5 e
 Recent Updates
 ==============
 
-- Added before, edit, save, and after call back events that are extendable
-- Restructured plugin 
+- Added before, edit, save, and after call back events that are extendable!
 
 To-Do
 =====
@@ -27,15 +26,14 @@ Changing Default Buttons
 
 You can pass an array of ``buttons`` to include:
 
-.. code:: html
-
+.. code:: javascript
 	$('.editor').wysiwyg({
 		buttons: ['bold', 'italic', 'strikeThrough']
 	});
 
 Here's a full list of the default buttons that currently come with the editor (this may be out of date so double check wysiwyg.js):
 
-.. code:: html
+.. code:: javascript
 	buttons: ['bold', 'italic', 'underline', 'strikethough', 'h1', 'h2', 'ul', 'ol', 'increaseFont', 'decreaseFont', 'hr', 'indentRight', 'indentLeft', 'justifyLeft', 'justifyCenter', 'justifyRight', 'link', 'subscript', 'superscript', 'image', 'removeFormat', 'br'],
 
 =================
@@ -44,8 +42,7 @@ Excluding Buttons
 
 You can pass an array of ``excludedButtons`` to exclude buttons:
 
-.. code:: html
-
+.. code:: javascript
 	$('.editor').wysiwyg({
 		excludeButtons: ['br', 'fontDecrease']
 	});
@@ -56,8 +53,7 @@ Custom CSS
 
 You can pass custom CSS to the ``buttons`` and/or ``icons`` with thte following:
 
-.. code:: html
-
+.. code:: javascript
 	$('.editor').wysiwyg({
 		css: {
 			buttons: {
@@ -75,7 +71,7 @@ Custom Events
 
 You can modify the ``before``, ``edit``, ``save``, and ``after`` functions with the following syntax:
 
-.. code:: html
+.. code:: javascript
 
 	$('.editor').wysiwyg({
 		events: {

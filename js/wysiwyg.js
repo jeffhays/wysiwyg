@@ -133,8 +133,6 @@
 						action: 'update',
 						content: ''
 					}
-				}).done(function() {
-
 				});
 			},
 			// Before wysiwyg(s) are created
