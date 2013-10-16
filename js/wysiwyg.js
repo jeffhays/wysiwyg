@@ -63,10 +63,18 @@
 	}
 
 	// Insert link into selected area
-	function createLink() {
+	function link() {
 		var link = prompt('Please specify the link.');
 		if(link) {
 			document.execCommand('createLink', false, link);
+		}
+	}
+
+	// Insert link into selected area
+	function fontSize() {
+		var size = prompt('Please specify the font size (1-7)');
+		if(size) {
+			document.execCommand('fontSize', true, size);
 		}
 	}
 
@@ -165,7 +173,7 @@
 		// Default settings
 		var defaults = {
 			// Buttons to show
-			buttons: ['bold', 'italic', 'underline', 'strikethough', 'h1', 'h2', 'ul', 'ol', 'increaseFont', 'decreaseFont', 'hr', 'indentRight', 'indentLeft', 'justifyLeft', 'justifyCenter', 'justifyRight', 'link', 'subscript', 'superscript', 'image', 'removeFormat', 'br'],
+			buttons: ['bold', 'italic', 'underline', 'strikethough', 'h1', 'h2', 'ul', 'ol', 'link', 'unlink', 'fontSize', 'increaseFont', 'decreaseFont', 'hr', 'indentRight', 'indentLeft', 'justifyLeft', 'justifyCenter', 'justifyRight', 'subscript', 'superscript', 'image', 'removeFormat', 'br'],
 			// Buttons to hide
 			excludeButtons: [],
 			// HTML
@@ -267,12 +275,18 @@
 						document.execCommand('insertOrderedList', false, null);
 					}).css(styles.buttons)
 				}, {
+					// Set font size
+					name: 'fontSize',
+					html: $('<button>').append(
+						$('<i>').addClass('icon-font').css(styles.icons)
+					).prop({title: 'Set Font Size', alt: 'Set Font Size'}).click(function() { fontSize(); }).css(styles.buttons)
+				}, {
 					// Increase font size
 					name: 'increaseFont',
 					html: $('<button>').append(
 						$('<i>').addClass('icon-long-arrow-up').css(styles.icons)
 					).prop({title: 'Increase Font Size', alt: 'Increase Font Size'}).click(function() {
-						document.execCommand('increaseFontSize', true, null);
+						document.execCommand('increaseFontSize', false, 'big');
 					}).css(styles.buttons)
 				}, {
 					// Decrease font size
@@ -332,10 +346,18 @@
 					}).css(styles.buttons)
 				}, {
 					// Create link
-					name: 'createLink',
+					name: 'link',
 					html: $('<button>').append(
 						$('<i>').addClass('icon-link').css(styles.icons)
-					).prop({title: 'Create Link', alt: 'Create Link'}).click(function() { createLink(); }).css(styles.buttons)
+					).prop({title: 'Create Link', alt: 'Create Link'}).click(function() { link(); }).css(styles.buttons)
+				}, {
+					// Remove link
+					name: 'unlink',
+					html: $('<button>').append(
+						$('<i>').addClass('icon-unlink').css(styles.icons)
+					).prop({title: 'Remove Link', alt: 'Remove Link'}).click(function() {
+						document.execCommand('unlink', false, null);
+					}).css(styles.buttons)
 				}, {
 					// Subscript
 					name: 'subscript',

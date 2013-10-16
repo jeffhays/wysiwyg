@@ -36,13 +36,17 @@
 		var test = $('.editor').wysiwyg({
 			css: {
 				buttons: {
-					padding: '.6em'
+					cursor: 'pointer',
+					background: 'transparent',
+					border: 'none'
 				},
 				icons: {
-					color: 'red'
+					color: 'red',
+					fontSize: '1.6em'
 				}
 			}
 		});
+		console.log(test);
 	});
 	</script>
 </body>

@@ -13,10 +13,12 @@ To-Do
 =====
 
 - Add AJAX save events and functions with fully extendable options
+- Add functionality for "View HTML" button
 - Add unwrap function (to unwrap content wrapped in wrap() output)
 - Add toggle function (to toggle a wrapped element around selected content)
 - Add options for extending button styles
 - Add font dropdown/autocomplete/list for selecting font families
+- Tie events to wrapper to allow developer to trigger the events
 - Debug issues with increaseFont/decreaseFont
 - Add in custom event hooks to buttons and/or wysiwyg in general
 
@@ -32,28 +34,28 @@ You can pass an array of ``buttons`` to include:
 
 Here's a full list of the default buttons that currently come with the editor (this may be out of date so double check wysiwyg.js):
 
-- bold
-- italic
-- underline
-- strikethough
-- h1
-- h2
-- ul
-- ol
-- increaseFont
-- decreaseFont
-- hr
-- indentRight
-- indentLeft
-- justifyLeft
-- justifyCenter
-- justifyRight
-- link
-- subscript
-- superscript
-- image
-- removeFormat
-- br
+``bold``
+``italic``
+``underline``
+``strikethough``
+``h1``
+``h2``
+``ul``
+``ol``
+``increaseFont``
+``decreaseFont``
+``hr``
+``indentRight``
+``indentLeft``
+``justifyLeft``
+``justifyCenter``
+``justifyRight``
+``link``
+``subscript``
+``superscript``
+``image``
+``removeFormat``
+``br``
 
 =================
 Excluding Buttons
@@ -86,7 +88,14 @@ You can pass custom CSS to the ``buttons`` and/or ``icons`` with thte following:
 Custom Events
 =============
 
-You can modify the ``before``, ``edit``, ``save``, and ``after`` functions with the following syntax:
+You can modify the following functions:
+
+``before``,
+``edit``,
+``save``,
+``after``
+
+With the following syntax:
 
 	$('.editor').wysiwyg({
 		events: {
