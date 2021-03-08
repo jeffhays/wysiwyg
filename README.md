@@ -1,6 +1,5 @@
-==========
-ez wysiwyg
-==========
+# ez wysiwyg
+============
 
 This is a custom jQuery WYSIWYG editor plugin made with content editable HTML5 elements and dynamically created buttons (with Font Awesome icons). When the project is finished it will be an editor made by/for developers, with the ability to override any events, styles, or markup you want without having to modify the plugin. If you'd like to contribute, please send a request!
 
